@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
-  * error_func - A function handling errors.
+  * errorfunc - A function handling errors.
   *
   * @error_m: Supplimentary error message.
   * Return: No value.
@@ -10,4 +10,30 @@ void errorfunc(char *error_m)
 {
 	perror(error_m);
 	exit(EXIT_FAILURE);
+}
+/**
+  * freefunc -Frees a char**.
+  * @arr: The variable.
+  * @cnt: Number of elemnts.
+  * Return: No value.
+  */
+void freefunc(char **arr, int cnt)
+{
+	int r;
+
+	r = 0;
+
+	if (!arr || !cnt)
+	{
+		return;
+	}
+	else
+	{
+		while (r < cnt)
+		{
+			free(arr[r]);
+			r++;
+		}
+		free(arr);
+	}
 }

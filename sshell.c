@@ -14,11 +14,11 @@ int main(int ac, char **av)
 	ssize_t chars;
 	char *bufptr = NULL;
 	size_t len = 0;
-	char *tok;
-	char *args[2];
+	char *args[3];
 	(void) ac;
 	(void) av;
 
+	signal(SIGINT, SIG_IGN);
 	if ((termconec = isatty(0)) == 1)
 	{
 		printf("[$] ");
@@ -35,9 +35,9 @@ int main(int ac, char **av)
 		}
 		else if (to_fork == 0)
 		{
-			tok = strtok(bufptr, " \t\r\n\f\v");
-			args[0] = tok;
-			args[1] = NULL;
+			args[0] = strtok(bufptr, " \t\r\n\f\v");
+			args[1] = strtok(NULL, " \t\r\n\f\v");
+			args[2] = NULL;
 			if ((execve(args[0], args, environ)) == -1)
 			{
 				free(bufptr);
@@ -55,5 +55,6 @@ int main(int ac, char **av)
 		free(bufptr);
 		exit(EXIT_SUCCESS);
 	}
+	free(bufptr);
 	return (0);
 }
