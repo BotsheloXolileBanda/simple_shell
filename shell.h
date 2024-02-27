@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 extern char **environ;
 void errorfunc(char *error_m);
@@ -18,4 +19,5 @@ char **built(char **arr, int cnt, char *name);
 int checkexis(char *string, char *delim, char *name);
 int check(char **built, int cnt);
 void freefunc(char **arr, int cnt);
+char *freenull(char *ptr);
 #endif

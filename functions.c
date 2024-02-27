@@ -37,3 +37,16 @@ void freefunc(char **arr, int cnt)
 		free(arr);
 	}
 }
+char *freenull(char *ptr)
+{
+	if (ptr == NULL)
+	{
+		return (ptr);
+	}
+	else
+	{
+		free(ptr);
+		ptr = NULL;
+		return (NULL);
+	}
+}
