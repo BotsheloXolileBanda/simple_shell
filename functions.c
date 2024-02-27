@@ -32,9 +32,11 @@ void freefunc(char **arr, int cnt)
 		while (r < cnt)
 		{
 			free(arr[r]);
+			arr[r] = NULL;
 			r++;
 		}
 		free(arr);
+		arr = NULL;
 	}
 }
 char *freenull(char *ptr)

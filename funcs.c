@@ -1,3 +1,4 @@
+#include "shell.h"
 /**
   * countwords - Counts words in a string.
   *
@@ -11,7 +12,7 @@ int countwords(char *string, char *delim)
 	int r;
 	char *dupdstr;
 
-	if (!str || !delim)
+	if (!string || !delim)
 	{
 		return (0);
 	}
@@ -21,7 +22,7 @@ int countwords(char *string, char *delim)
 
 		r = 0;
 
-		token = strtok(dupstr, delim);
+		token = strtok(dupdstr, delim);
 
 		while (token != NULL)
 		{
@@ -29,7 +30,7 @@ int countwords(char *string, char *delim)
 			token = strtok(NULL, delim);
 		}
 
-		free(dupstr);
+		free(dupdstr);
 		return (r);
 	}
 }
@@ -85,7 +86,7 @@ char **build(char **arr, int cnt, char *name)
 	char **newarr;
 	char *namedup;
 
-	if (!strings || !cnt || !name)
+	if (!arr || !cnt || !name)
 	{
 		return (NULL);
 	}
@@ -132,9 +133,12 @@ char **build(char **arr, int cnt, char *name)
   */
 int check(char **built, int cnt)
 {
-	int r;
-
 	struct stat st;
+	int r, flag;
+
+	flag = 0;
+
+	r = 0;
 
 	if (!built || !cnt)
 	{
@@ -172,16 +176,11 @@ int check(char **built, int cnt)
   */
 int checkexis(char *string, char *delim, char *name)
 {
-	int r, cnt, answer;
+	int cnt, answer;
 	char *stringdup;
 	char *namedup;
 	char **arr;
 	char **built;
-	int flag = 0;
-
-	struct stat st;
-
-	r = 0;
 
 	if (!string || !delim || !name)
 	{
@@ -203,7 +202,7 @@ int checkexis(char *string, char *delim, char *name)
 		}
 		else
 		{
-			arr = tokenize(stringdup, delim, cnt);
+			arr = separator(stringdup, delim, cnt);
 
 			if (!arr)
 			{

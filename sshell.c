@@ -9,7 +9,6 @@
   */
 int main(int ac, char **av)
 {
-	struct stat st;
 	int termconec, wstatus;
 	pid_t to_fork;
 	char *bufcp;
@@ -17,6 +16,8 @@ int main(int ac, char **av)
 	char *bufptr = NULL;
 	size_t len = 0;
 	char *args[3];
+	char *path;
+	char *pathcp;
 	(void) ac;
 
 	signal(SIGINT, SIG_IGN);
@@ -27,19 +28,23 @@ int main(int ac, char **av)
 
 	while ((chars = getline(&bufptr, &len, stdin)) != -1)
 	{
+		path = getenv("PATH");
+		pathcp = strdup(path);
 		bufcp = strdup(bufptr);
 		if (bufcp[0] == 3)
 		{
 			bufcp = freenull(bufcp);
+			pathcp = freenull(pathcp);
 			printf("[$] ");
 			continue;
 		}
-		else if (stat((strtok(bufcp, " \t\r\n\f\v")), &st) == 0)
+		else if ((checkexis(pathcp, ":", strtok(bufcp, " \t\r\n\f\v"))) == 0)
 		{
 			to_fork = fork();
 
 			if (to_fork == -1)
 			{
+				pathcp = freenull(pathcp);
 				bufcp = freenull(bufcp);
 				bufptr = freenull(bufptr);
 				errorfunc("Fork failed");
@@ -51,6 +56,7 @@ int main(int ac, char **av)
 				args[2] = NULL;
 				if ((execve(args[0], args, environ)) == -1)
 				{
+					pathcp = freenull(pathcp);
 					bufcp = freenull(bufcp);
 					bufptr = freenull(bufptr);
 					perror(av[0]);
@@ -59,6 +65,7 @@ int main(int ac, char **av)
 			}
 			else
 			{
+				pathcp = freenull(pathcp);
 				bufcp = freenull(bufcp);
 				bufptr = freenull(bufptr);
 				wait(&wstatus);
@@ -71,6 +78,7 @@ int main(int ac, char **av)
 		}
 		else
 		{
+			pathcp = freenull(pathcp);
 			bufcp = freenull(bufcp);
 			perror(av[0]);
 			printf("[$] ");
@@ -79,10 +87,12 @@ int main(int ac, char **av)
 	}
 	if (chars == -1)
 	{
-		freenull(bufcp);
-		freenull(bufptr);
+		pathcp = freenull(pathcp);
+		bufcp = freenull(bufcp);
+		bufptr = freenull(bufptr);
 		exit(EXIT_SUCCESS);
 	}
+	pathcp = freenull(pathcp);
 	bufcp = freenull(bufcp);
 	bufptr = freenull(bufptr);
 	return (0);
