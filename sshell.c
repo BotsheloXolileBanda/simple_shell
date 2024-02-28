@@ -9,7 +9,9 @@
   */
 int main(int ac, char **av)
 {
-	int r;
+	char *cmd;
+	char *firs;
+	int r, status;
 	int flag = 0;
 	struct stat st;
 	int termconec, wstatus;
@@ -35,7 +37,11 @@ int main(int ac, char **av)
 		path = getenv("PATH");
 		pathcp = strdup(path);
 		bufcp = strdup(bufptr);
-		if (stat((strtok(bufcp, " \t\r\n\f\v")), &st) == 0)
+		cmd = strtok(bufcp, " \t\r\n\f\v");
+		status = stat(cmd, &st);
+		firs = checkexis(pathcp, ":", cmd);
+
+		if (!status || firs)
 		{
 			to_fork = fork();
 
@@ -44,11 +50,12 @@ int main(int ac, char **av)
 				pathcp = freenull(pathcp);
 				bufcp = freenull(bufcp);
 				bufptr = freenull(bufptr);
+				firs = freenull(firs);
 				errorfunc("Fork failed");
 			}
 			else if (to_fork == 0)
 			{
-				args[0] = strtok(bufptr, " \t\r\n\f\v");
+				args[0] = firs?firs:strtok(bufptr, " \t\r\n\f\v");
 				args[1] = strtok(NULL, " \t\r\n\f\v");
 				args[2] = strtok(NULL, " \t\r\n\f\v");
 				args[3] = NULL;
@@ -57,6 +64,7 @@ int main(int ac, char **av)
 					pathcp = freenull(pathcp);
 					bufcp = freenull(bufcp);
 					bufptr = freenull(bufptr);
+					firs = freenull(firs);
 					perror(av[0]);
 					continue;
 				}
@@ -66,6 +74,7 @@ int main(int ac, char **av)
 				pathcp = freenull(pathcp);
 				bufcp = freenull(bufcp);
 				bufptr = freenull(bufptr);
+				firs = freenull(firs);
 				wait(&wstatus);
 				if ((termconec = isatty(0)) == 1)
 				{
@@ -93,6 +102,7 @@ int main(int ac, char **av)
 			pathcp = freenull(pathcp);
 			bufcp = freenull(bufcp);
 			bufptr = freenull(bufptr);
+			firs = freenull(firs);
 			perror(av[0]);
 			printf("[$] ");
 			continue;
@@ -105,16 +115,19 @@ int main(int ac, char **av)
 			pathcp = freenull(pathcp);
 			bufcp = freenull(bufcp);
 			bufptr = freenull(bufptr);
+			firs = freenull(firs);
 			exit(EXIT_SUCCESS);
 		}
 		else
 		{
 			bufptr = freenull(bufptr);
+			firs = freenull(bufptr);
 			exit(EXIT_SUCCESS);
 		}
 	}
 	pathcp = freenull(pathcp);
 	bufcp = freenull(bufcp);
 	bufptr = freenull(bufptr);
+	firs = freenull(firs);
 	return (0);
 }

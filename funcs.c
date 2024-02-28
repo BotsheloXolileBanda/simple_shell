@@ -30,7 +30,7 @@ int countwords(char *string, char *delim)
 			token = strtok(NULL, delim);
 		}
 
-		free(dupdstr);
+		dupdstr = freenull(dupdstr);
 		return (r);
 	}
 }
@@ -61,7 +61,7 @@ char **separator(char *string, char *delim, int cnt)
 
 		if (!strings)
 		{
-			free(dupdstr);
+			dupdstr = freenull(dupdstr);
 			return (NULL);
 		}
 		else
@@ -74,7 +74,7 @@ char **separator(char *string, char *delim, int cnt)
 				r++;
 				token = strtok(NULL, delim);
 			}
-			free(dupdstr);
+			dupdstr = freenull(dupdstr);
 			return (strings);
 		}
 	}
@@ -97,6 +97,7 @@ char **build(char **arr, int cnt, char *name)
 
 		if (!newarr)
 		{
+		namedup = freenull(namedup);
 		return (NULL);
 		}
 		else
@@ -119,7 +120,8 @@ char **build(char **arr, int cnt, char *name)
 			{
 				strcat(newarr[z], namedup);
 			}
-			free(namedup);
+			namedup = freenull(namedup);
+			arr = freefunc(arr, cnt);
 			return (newarr);
 		}
 	}
@@ -158,11 +160,11 @@ int check(char **built, int cnt)
 
 		if (flag)
 		{
-			return (0);
+			return (r);
 		}
 		else
 		{
-			return (-1);
+			return (0);
 		}
 	}
 }
@@ -174,17 +176,18 @@ int check(char **built, int cnt)
   * name: The inputted file.
   * Return: 0 on success, -1 otherwise.
   */
-int checkexis(char *string, char *delim, char *name)
+char *checkexis(char *string, char *delim, char *name)
 {
 	int cnt, answer;
 	char *stringdup;
 	char *namedup;
 	char **arr;
 	char **built;
+	char *found;
 
 	if (!string || !delim || !name)
 	{
-		return (-1);
+		return (NULL);
 	}
 	else
 	{
@@ -196,9 +199,9 @@ int checkexis(char *string, char *delim, char *name)
 
 		if (!cnt)
 		{
-			free(stringdup);
-			free(namedup);
-			return (-1);
+			stringdup = freenull(stringdup);
+			namedup = freenull(namedup);
+			return (NULL);
 		}
 		else
 		{
@@ -206,9 +209,9 @@ int checkexis(char *string, char *delim, char *name)
 
 			if (!arr)
 			{
-				free(stringdup);
-				free(namedup);
-				return (-1);
+				stringdup = freenull(stringdup);
+				namedup = freenull(namedup);
+				return (NULL);
 			}
 			else
 			{
@@ -216,30 +219,29 @@ int checkexis(char *string, char *delim, char *name)
 
 				if (!built)
 				{
-					free(namedup);
-					free(stringdup);
-					freefunc(arr, cnt);
-					return (-1);
+					namedup = freenull(namedup);
+					stringdup = freenull(stringdup);
+					arr = freefunc(arr, cnt);
+					return (NULL);
 				}
 				else
 				{
 					answer = check(built, cnt);
 
-					if (answer == 0)
+					if (answer)
 					{
-						free(stringdup);
-						free(namedup);
-						freefunc(arr, cnt);
-						freefunc(arr, cnt);
-						return (0);
+						found = strdup(built[answer]);
+						stringdup = freenull(stringdup);
+						namedup = freenull(namedup);
+						built = freefunc(built, cnt);
+						return (found);
 					}
 					else
 					{
-						free(stringdup);
-						free(namedup);
-						freefunc(arr, cnt);
-						freefunc(built, cnt);
-						return (-1);
+						stringdup = freenull(stringdup);
+						namedup = freenull(namedup);
+						built = freefunc(built, cnt);
+						return (NULL);
 					}
 				}
 			}

@@ -16,8 +16,8 @@ void catchsig(int signum);
 int countwords(char *string, char *delim);
 char **separator(char *string, char *delim, int cnt);
 char **built(char **arr, int cnt, char *name);
-int checkexis(char *string, char *delim, char *name);
+char *checkexis(char *string, char *delim, char *name);
 int check(char **built, int cnt);
-void freefunc(char **arr, int cnt);
+char **freefunc(char **arr, int cnt);
 char *freenull(char *ptr);
 #endif

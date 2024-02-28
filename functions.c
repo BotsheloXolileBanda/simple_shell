@@ -17,7 +17,7 @@ void errorfunc(char *error_m)
   * @cnt: Number of elemnts.
   * Return: No value.
   */
-void freefunc(char **arr, int cnt)
+char **freefunc(char **arr, int cnt)
 {
 	int r;
 
@@ -25,7 +25,7 @@ void freefunc(char **arr, int cnt)
 
 	if (!arr || !cnt)
 	{
-		return;
+		return (NULL);
 	}
 	else
 	{
@@ -37,6 +37,7 @@ void freefunc(char **arr, int cnt)
 		}
 		free(arr);
 		arr = NULL;
+		return (NULL);
 	}
 }
 char *freenull(char *ptr)
