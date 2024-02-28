@@ -9,6 +9,7 @@
   */
 int main(int ac, char **av)
 {
+	int r;
 	int flag = 0;
 	struct stat st;
 	int termconec, wstatus;
@@ -71,6 +72,16 @@ int main(int ac, char **av)
 					printf("[$] ");
 			
 				}
+			}
+		}
+		else if ((strcmp(bufcp, "env")) == 0)
+		{
+			r = 0;
+
+			while (environ[r])
+			{
+				printf("%s\n", environ[r]);
+				r++;
 			}
 		}
 		else if ((strcmp(bufcp, "exit")) == 0)
