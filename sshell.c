@@ -9,6 +9,7 @@
   */
 int main(int ac, char **av)
 {
+	struct stat st;
 	int termconec, wstatus;
 	pid_t to_fork;
 	char *bufcp;
@@ -31,14 +32,14 @@ int main(int ac, char **av)
 		path = getenv("PATH");
 		pathcp = strdup(path);
 		bufcp = strdup(bufptr);
-		if (bufcp[0] == 3)
+		if (bufcp[0] == 32)
 		{
 			bufcp = freenull(bufcp);
 			pathcp = freenull(pathcp);
 			printf("[$] ");
 			continue;
 		}
-		else if ((checkexis(pathcp, ":", strtok(bufcp, " \t\r\n\f\v"))) == 0)
+		else if (stat((strtok(bufcp, " \t\r\n\f\v")), &st) == 0)
 		{
 			to_fork = fork();
 
