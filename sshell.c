@@ -9,6 +9,7 @@
   */
 int main(int ac, char **av)
 {
+	int flag = 0;
 	struct stat st;
 	int termconec, wstatus;
 	pid_t to_fork;
@@ -16,7 +17,7 @@ int main(int ac, char **av)
 	ssize_t chars;
 	char *bufptr = NULL;
 	size_t len = 0;
-	char *args[3];
+	char *args[4];
 	char *path;
 	char *pathcp;
 	(void) ac;
@@ -29,17 +30,11 @@ int main(int ac, char **av)
 
 	while ((chars = getline(&bufptr, &len, stdin)) != -1)
 	{
+		flag = 1;
 		path = getenv("PATH");
 		pathcp = strdup(path);
 		bufcp = strdup(bufptr);
-		if (bufcp[0] == 32)
-		{
-			bufcp = freenull(bufcp);
-			pathcp = freenull(pathcp);
-			printf("[$] ");
-			continue;
-		}
-		else if (stat((strtok(bufcp, " \t\r\n\f\v")), &st) == 0)
+		if (stat((strtok(bufcp, " \t\r\n\f\v")), &st) == 0)
 		{
 			to_fork = fork();
 
@@ -54,7 +49,8 @@ int main(int ac, char **av)
 			{
 				args[0] = strtok(bufptr, " \t\r\n\f\v");
 				args[1] = strtok(NULL, " \t\r\n\f\v");
-				args[2] = NULL;
+				args[2] = strtok(NULL, " \t\r\n\f\v");
+				args[3] = NULL;
 				if ((execve(args[0], args, environ)) == -1)
 				{
 					pathcp = freenull(pathcp);
@@ -77,10 +73,15 @@ int main(int ac, char **av)
 				}
 			}
 		}
+		else if ((strcmp(bufcp, "exit")) == 0)
+		{
+			break;
+		}
 		else
 		{
 			pathcp = freenull(pathcp);
 			bufcp = freenull(bufcp);
+			bufptr = freenull(bufptr);
 			perror(av[0]);
 			printf("[$] ");
 			continue;
@@ -88,10 +89,18 @@ int main(int ac, char **av)
 	}
 	if (chars == -1)
 	{
-		pathcp = freenull(pathcp);
-		bufcp = freenull(bufcp);
-		bufptr = freenull(bufptr);
-		exit(EXIT_SUCCESS);
+		if (flag)
+		{
+			pathcp = freenull(pathcp);
+			bufcp = freenull(bufcp);
+			bufptr = freenull(bufptr);
+			exit(EXIT_SUCCESS);
+		}
+		else
+		{
+			bufptr = freenull(bufptr);
+			exit(EXIT_SUCCESS);
+		}
 	}
 	pathcp = freenull(pathcp);
 	bufcp = freenull(bufcp);
