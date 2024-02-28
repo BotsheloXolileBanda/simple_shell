@@ -79,6 +79,14 @@ char **separator(char *string, char *delim, int cnt)
 		}
 	}
 }
+/**
+  * build - Creates a double pointer.
+  *
+  * @arr: Original array.
+  * @cnt: Nmber of elements.
+  * @name: Name to attach to it.
+  * Return: Pointer or NULL.
+  */
 char **build(char **arr, int cnt, char *name)
 {
 	int r, x, y, z, len;
@@ -131,7 +139,7 @@ char **build(char **arr, int cnt, char *name)
   *
   * @built: Different files.
   * @cnt: Number of files.
-  * Return: ) on success, -1 otherwise.
+  * Return: 0 on success, -1 otherwise.
   */
 int check(char **built, int cnt)
 {
@@ -173,7 +181,7 @@ int check(char **built, int cnt)
   *
   * @string: Path variable.
   * @delim: THe :.
-  * name: The inputted file.
+  * @name: The inputted file.
   * Return: 0 on success, -1 otherwise.
   */
 char *checkexis(char *string, char *delim, char *name)

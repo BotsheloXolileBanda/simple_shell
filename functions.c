@@ -40,6 +40,12 @@ char **freefunc(char **arr, int cnt)
 		return (NULL);
 	}
 }
+/**
+  * freenull - Frees a pointer.
+  *
+  * @ptr: Ptr to free.
+  * Return: NULL.
+  */
 char *freenull(char *ptr)
 {
 	if (ptr == NULL)

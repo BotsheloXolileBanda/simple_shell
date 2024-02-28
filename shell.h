@@ -20,4 +20,7 @@ char *checkexis(char *string, char *delim, char *name);
 int check(char **built, int cnt);
 char **freefunc(char **arr, int cnt);
 char *freenull(char *ptr);
+char *_getenv(char *envvar);
+int checkenv(char *str1, char *str2, char sym);
+int getinsidevar(char *str, char sym);
 #endif

@@ -34,7 +34,7 @@ int main(int ac, char **av)
 	while ((chars = getline(&bufptr, &len, stdin)) != -1)
 	{
 		flag = 1;
-		path = getenv("PATH");
+		path = _getenv("PATH");
 		pathcp = strdup(path);
 		bufcp = strdup(bufptr);
 		cmd = strtok(bufcp, " \t\r\n\f\v");
